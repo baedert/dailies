@@ -116,7 +116,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		if (ident != "{") {
 			// child type
 			string child_type = ident[1..$];
-			//writeln(child_type);
 			if (child_type == "titlebar")
 				child_info.type = ChildType.TITLEBAR;
 			else
@@ -180,7 +179,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ non_construct_props[prop_name] ~ ");\n";
 		}
 		foreach (c; styleClasses) {
-			result ~= child_info.id ~ ".getStyleContext().addClass(\"" ~ c ~ "\");\n";
+			result ~= child_info.id ~ ".getStyleContext().addClass(\"" ~ c.strip() ~ "\");\n";
 		}
 
 		while (ident != "}") { // until this object ends
