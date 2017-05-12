@@ -36,7 +36,6 @@ enum ui = q{
 				.Vexpand = true
 				ListBox eventListBox {
 					.SelectionMode = SelectionMode.NONE
-
 				}
 			}
 		}
@@ -54,7 +53,7 @@ public:
 		eventDb = new EventDatabase();
 		eventDb.load();
 		foreach(Event e; eventDb.getEvents()) {
-			eventListBox.add(new EventRow(e));
+			eventListBox.add(new EventRow(e, eventDb));
 		}
 
 		this.resize(600, 400);
@@ -83,9 +82,5 @@ private:
 		box.showAll();
 		popover.add(box);
 		popover.popup();
-	}
-
-	void submitButtonClicked(Button button) {
-
 	}
 }

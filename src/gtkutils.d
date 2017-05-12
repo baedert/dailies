@@ -126,8 +126,8 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		if (toplevel)
 			assert(child_info.id == "this");
 
-		string[string] construct_props;
-		string[string] non_construct_props;
+		string[string] constructProps;
+		string[string] nonConstructProps;
 		string[] styleClasses;
 		expect("{");
 		next();
@@ -145,9 +145,9 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 				expect("=");
 				string prop_value = getUntil('\n').strip();
 				if (construct) {
-					construct_props[prop_name[1..$]] = prop_value;
+					constructProps[prop_name[1..$]] = prop_value;
 				} else {
-					non_construct_props[prop_name[1..$]] = prop_value;
+					nonConstructProps[prop_name[1..$]] = prop_value;
 				}
 			}
 
@@ -163,20 +163,20 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 				result ~= object_type ~ " " ~ child_info.id ~ " = new " ~ object_type ~ "(";
 
 			// This will leave a trailing comma but whatever
-			foreach (prop_name; construct_props.keys) {
-				result ~= construct_props[prop_name] ~ ", ";
+			foreach (prop_name; constructProps.keys) {
+				result ~= constructProps[prop_name] ~ ", ";
 			}
 			result ~= ");\n";
 		} else {
 			result ~= "super(";
-			foreach (foo; construct_props.keys) {
-				result ~= construct_props[foo] ~ ", ";
+			foreach (foo; constructProps.keys) {
+				result ~= constructProps[foo] ~ ", ";
 			}
 			result ~= ");\n";
 		}
 
-		foreach (prop_name; non_construct_props.keys) {
-			result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ non_construct_props[prop_name] ~ ");\n";
+		foreach (prop_name; nonConstructProps.keys) {
+			result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ nonConstructProps[prop_name] ~ ");\n";
 		}
 		foreach (c; styleClasses) {
 			result ~= child_info.id ~ ".getStyleContext().addClass(\"" ~ c.strip() ~ "\");\n";

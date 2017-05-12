@@ -6,6 +6,7 @@ import gtk.CheckButton;
 
 import gtkutils;
 import event;
+import eventdatabase;
 
 enum ui = q{
 	ListBoxRow this {
@@ -27,11 +28,35 @@ enum ui = q{
 
 class EventRow : ListBoxRow {
 public:
-	this(Event event) {
+	this(Event event, EventDatabase db) {
 		mixin(uiInit(ui));
+		this.event = event;
+
+		updateStyleClasses();
 
 		nameLabel.setLabel(event.getName());
+		doneButton.setActive(event.todayChecked());
+		doneButton.addOnToggled((cb) {
+			event.check();
+			db.save();
+		});
+	}
+
+	public void updateStyleClasses() {
+		float p = event.getPercentage();
+		if (p > 0.9) {
+			getStyleContext().addClass("over-90");
+		} else if (p > 0.75) {
+			getStyleContext().addClass("over-75");
+		} else if (p > 0.50) {
+			getStyleContext().addClass("over-50");
+		} else if (p > 0.25) {
+			getStyleContext().addClass("over-25");
+		} else {
+			getStyleContext().addClass("over-00");
+		}
 	}
 private:
 	mixin(uiMembers(ui));
+	Event event;
 }

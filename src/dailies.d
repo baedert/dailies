@@ -18,6 +18,24 @@ enum appCss = q{
 		padding-bottom: 12px;
 		padding-right: 24px;
 		padding-left: 24px;
+		background-image: none;
+	}
+
+	.over-90 {
+		/* Light green */
+		background-color: rgb(124,255,105);
+	}
+	.over-75 {
+
+	}
+	.over-50 {
+
+	}
+	.over-25 {
+
+	}
+	.over-00 {
+		background-color: red;
 	}
 };
 
