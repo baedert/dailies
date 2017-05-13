@@ -16,17 +16,20 @@ public:
 		return checked;
 	}
 
-	// We check how often the event was checked in the last 14 days
-	// and return the percentage.
-	float getPercentage() {
+	// Returns the amount of days considered in getPercentage()
+	int getDays() {
 		import std.algorithm;
+		return min(14, checked.length);
+	}
+
+	int getCheckedDays() {
 		import std.stdio;
 		auto now = Clock.currTime();
 		int nChecked = 0;
-		auto nTimes = min (14, checked.length);
+		auto nTimes = this.getDays();
 
 		if (nTimes == 0)
-			return 0.0f;
+			return 0;
 
 		for (ulong i = 0; i < nTimes; i ++) {
 			// Only check times in the last 14 days
@@ -35,7 +38,14 @@ public:
 
 			nChecked++;
 		}
-		return cast(float)nChecked / cast(float)nTimes;
+
+		return nChecked;
+	}
+
+	// We check how often the event was checked in the last 14 days
+	// and return the percentage.
+	float getPercentage() {
+		return cast(float)getCheckedDays() / cast(float)getDays();
 	}
 
 	void check() {

@@ -29,6 +29,10 @@ enum ui = q{
 					.Halign = Align.START
 					.Xalign = 0
 				}
+				Label ratioLabel {
+					|label = ""
+					#style = dim-label
+				}
 				Button menuButton {
 					Image {
 						.FromIconName = "open-menu-symbolic", IconSize.BUTTON
@@ -104,6 +108,9 @@ public:
 		} else {
 			getStyleContext().addClass("over-00");
 		}
+
+		import std.conv: to;
+		this.ratioLabel.setLabel(to!string(event.getCheckedDays()) ~ " / " ~ to!string(event.getDays()));
 	}
 private:
 	mixin(uiMembers(ui));
