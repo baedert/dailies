@@ -69,13 +69,21 @@ private:
 		auto box = new Box(Orientation.HORIZONTAL, 12);
 		box.add(new Label("Name:"));
 		auto entry = new Entry();
+		entry.setActivatesDefault(true);
 		box.add(entry);
 		auto submitButton = new Button("Save");
+		submitButton.setReceivesDefault(true);
+		submitButton.setCanDefault(true);
+		popover.setDefaultWidget(submitButton);
 		box.add(submitButton);
 
 		submitButton.addOnClicked((button) {
-			eventDb.addNewEvent(entry.getText());
+			auto e = eventDb.addNewEvent(entry.getText());
+			auto row =  new EventRow(e, eventDb);
+			row.showAll();
+			eventListBox.add(row);
 			eventDb.save();
+			popover.popdown();
 		});
 
 

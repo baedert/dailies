@@ -67,8 +67,10 @@ public:
 		return events;
 	}
 
-	public void addNewEvent(string eventName) {
-		events ~= new Event(eventName);
+	public Event addNewEvent(string eventName) {
+		Event e = new Event(eventName);
+		events ~= e;
+		return e;
 	}
 
 
