@@ -23,12 +23,8 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	string ident = null;
 	string[string] objectIds;
 
-	enum ChildType {
-		NONE,
-		TITLEBAR,
-	}
 	struct ChildInfo {
-		ChildType type;
+		string childType;
 		string id;
 	}
 
@@ -99,32 +95,29 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	}
 
 	ChildInfo parseObject (bool toplevel = false) {
-		ChildInfo child_info;
-		string object_type = ident;
-		string object_id = null;
+		ChildInfo childInfo;
+		string objectType = ident;
+		string objectId = null;
 		next();
 		if (ident != "{") {
 			// Read object ID (optional!)
-			child_info.id = ident;
+			childInfo.id = ident;
 			next();
 			if (!toplevel)
-				objectIds[child_info.id] = object_type;
+				objectIds[childInfo.id] = objectType;
 		} else {
-			child_info.id = get_irrelevant_ident();
+			childInfo.id = get_irrelevant_ident();
 		}
 
 		if (ident != "{") {
 			// child type
-			string child_type = ident[1..$];
-			if (child_type == "titlebar")
-				child_info.type = ChildType.TITLEBAR;
-			else
-				assert(0);
+			assert(ident[0] == '$');
+			childInfo.childType = ident[1..$];
 			next();
 		}
 
 		if (toplevel)
-			assert(child_info.id == "this");
+			assert(childInfo.id == "this");
 
 		string[string] constructProps;
 		string[string] nonConstructProps;
@@ -157,10 +150,10 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 		if (!toplevel) {
 			// Generate the declaration
-			if (!just_members && child_info.id in objectIds)
-				result ~= child_info.id ~ " = new " ~ object_type ~ "(";
+			if (!just_members && childInfo.id in objectIds)
+				result ~= childInfo.id ~ " = new " ~ objectType ~ "(";
 			else
-				result ~= object_type ~ " " ~ child_info.id ~ " = new " ~ object_type ~ "(";
+				result ~= objectType ~ " " ~ childInfo.id ~ " = new " ~ objectType ~ "(";
 
 			// This will leave a trailing comma but whatever
 			foreach (prop_name; constructProps.keys) {
@@ -176,23 +169,24 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		}
 
 		foreach (prop_name; nonConstructProps.keys) {
-			result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ nonConstructProps[prop_name] ~ ");\n";
+			result ~= childInfo.id ~ ".set" ~ prop_name ~ "(" ~ nonConstructProps[prop_name] ~ ");\n";
 		}
 		foreach (c; styleClasses) {
-			result ~= child_info.id ~ ".getStyleContext().addClass(\"" ~ c.strip() ~ "\");\n";
+			result ~= childInfo.id ~ ".getStyleContext().addClass(\"" ~ c.strip() ~ "\");\n";
 		}
 
 		while (ident != "}") { // until this object ends
 			auto child = parseObject();
-			if (child.type == ChildType.TITLEBAR)
-				result ~= child_info.id ~ ".setTitlebar(" ~ child.id ~ ");\n";
+			if (child.childType !is null)
+				result ~= childInfo.id ~ ".set" ~ child.childType ~ "(" ~ child.id ~ ");\n";
+				//result ~= childInfo.id ~ ".setTitlebar(" ~ child.id ~ ");\n";
 			else
-				result ~= child_info.id ~ ".add(" ~ child.id ~ ");\n";
+				result ~= childInfo.id ~ ".add(" ~ child.id ~ ");\n";
 		}
 
 		next();
 
-		return child_info;
+		return childInfo;
 	}
 
 	// Kick off
