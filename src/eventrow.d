@@ -78,6 +78,13 @@ public:
 		backButton.addOnClicked((button) {
 			stack.setVisibleChild(defaultBox);
 		});
+
+		deleteButton.addOnClicked((button) {
+			db.removeEvent(event);
+			db.save();
+			ListBox parent = cast(ListBox)this.getParent();
+			parent.remove(this);
+		});
 	}
 
 	public void updateStyleClasses() {

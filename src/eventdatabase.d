@@ -53,14 +53,13 @@ public:
 			output ~= e.getName() ~ "\n";
 			output ~= (e.getCheckedTimes()
 			                        .map!(a => to!string(a.toUnixTime()))
-									.join(',')
+			                        .join(',')
 			                        .array.to!string) ~ "\n";
 		}
 
 		auto f = File(CONFIG_FILE, "w");
 		f.write(output);
 		f.close();
-		//std.file.write(CONFIG_FILE, output);
 	}
 
 	public Event[] getEvents() {
@@ -73,6 +72,17 @@ public:
 		return e;
 	}
 
+	public void removeEvent(Event e) {
+		int offset = 0;
+		foreach (event; events) {
+			if (e == event) {
+				break;
+			}
+			offset ++;
+		}
+
+		this.events = std.algorithm.remove(events, offset);
+	}
 
 private:
 	static enum CONFIG_DIR  = "/home/baedert/.config/dailies/";
