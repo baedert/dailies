@@ -20,5 +20,6 @@ dailies = executable(
         '-unittest',
         '-J../src/',
         '-I../src/'
-    ]
+    ],
+    install: true
 )
