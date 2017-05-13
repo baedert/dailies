@@ -39,11 +39,16 @@ public:
 		doneButton.addOnToggled((cb) {
 			event.check();
 			db.save();
+			updateStyleClasses();
 		});
 	}
 
 	public void updateStyleClasses() {
 		float p = event.getPercentage();
+		string[] classes = ["over-90", "over-75", "over-50", "over-25", "over-00"];
+		foreach(c; classes)
+			getStyleContext().removeClass(c);
+
 		if (p > 0.9) {
 			getStyleContext().addClass("over-90");
 		} else if (p > 0.75) {

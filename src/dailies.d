@@ -26,13 +26,12 @@ enum appCss = q{
 		background-color: rgb(124,255,105);
 	}
 	.over-75 {
-
 	}
 	.over-50 {
-
+		background-color: rgb(70,128,226);
 	}
 	.over-25 {
-
+		background-color: orange;
 	}
 	.over-00 {
 		background-color: red;
