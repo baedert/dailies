@@ -4,6 +4,7 @@ import gtk.Box;
 import gtk.Label;
 import gtk.Button;
 import gtk.Image;
+import gtk.Stack;
 import gtk.CheckButton;
 
 import gtkutils;
@@ -14,21 +15,40 @@ enum ui = q{
 	ListBoxRow this {
 		.Activatable = false
 		#style = event-row
-		Box {
-			|orientation = Orientation.HORIZONTAL
-			|spacing = 24
-			CheckButton doneButton {
+		Stack stack {
+			.TransitionType = StackTransitionType.SLIDE_UP_DOWN
+			Box defaultBox {
+				|orientation = Orientation.HORIZONTAL
+				|spacing = 24
+				CheckButton doneButton {
 
+				}
+				Label nameLabel {
+					|label = ""
+					.Hexpand = true
+					.Halign = Align.START
+					.Xalign = 0
+				}
+				Button menuButton {
+					Image {
+						.FromIconName = "open-menu-symbolic", IconSize.BUTTON
+					}
+				}
 			}
-			Label nameLabel {
-				|label = ""
-				.Hexpand = true
-				.Halign = Align.START
-				.Xalign = 0
-			}
-			Button {
-				Image {
-					.FromIconName = "open-menu-symbolic", IconSize.BUTTON
+
+			Box menuBox {
+				|orientation = Orientation.HORIZONTAL
+				|spacing = 24
+				Button deleteButton {
+					.Label = "Delete"
+				}
+				Button statsButton {
+					.Label = "Statistics"
+					.Hexpand = true
+					.Halign = Align.START
+				}
+				Button backButton {
+					.Label = "Back"
 				}
 			}
 		}
@@ -49,6 +69,14 @@ public:
 			event.check();
 			db.save();
 			updateStyleClasses();
+		});
+
+		menuButton.addOnClicked((button) {
+			stack.setVisibleChild(menuBox);
+		});
+
+		backButton.addOnClicked((button) {
+			stack.setVisibleChild(defaultBox);
 		});
 	}
 
