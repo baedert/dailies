@@ -19,7 +19,7 @@ import eventrow;
 enum ui = q{
 	ApplicationWindow this {
 		|app = app
-		HeaderBar header_bar $titlebar {
+		HeaderBar header_bar $Titlebar {
 			.ShowCloseButton = true
 			.Title = "Dailies"
 			Button addButton {
@@ -36,6 +36,10 @@ enum ui = q{
 				.Vexpand = true
 				ListBox eventListBox {
 					.SelectionMode = SelectionMode.NONE
+					Label pl $Placeholder {
+						|label = "No events found"
+						.Visible = true
+					}
 				}
 			}
 		}
