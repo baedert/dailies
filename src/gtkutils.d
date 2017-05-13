@@ -21,7 +21,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	int pos = 0;
 	char c = input[0];
 	string ident = null;
-	string[string] object_ids;
+	string[string] objectIds;
 
 	enum ChildType {
 		NONE,
@@ -108,7 +108,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			child_info.id = ident;
 			next();
 			if (!toplevel)
-				object_ids[child_info.id] = object_type;
+				objectIds[child_info.id] = object_type;
 		} else {
 			child_info.id = get_irrelevant_ident();
 		}
@@ -157,7 +157,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 		if (!toplevel) {
 			// Generate the declaration
-			if (!just_members && child_info.id in object_ids)
+			if (!just_members && child_info.id in objectIds)
 				result ~= child_info.id ~ " = new " ~ object_type ~ "(";
 			else
 				result ~= object_type ~ " " ~ child_info.id ~ " = new " ~ object_type ~ "(";
@@ -203,9 +203,9 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	// We simply do both things in both cases...
 	if (just_members) {
 		string member_result;
-		foreach (m; object_ids.keys) {
+		foreach (m; objectIds.keys) {
 			if (m != "this")
-				member_result ~= object_ids[m] ~ " " ~ m ~ ";\n";
+				member_result ~= objectIds[m] ~ " " ~ m ~ ";\n";
 		}
 		return member_result;
 	}
