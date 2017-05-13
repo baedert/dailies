@@ -2,6 +2,8 @@ import gtk.ListBox;
 import gtk.ListBoxRow;
 import gtk.Box;
 import gtk.Label;
+import gtk.Button;
+import gtk.Image;
 import gtk.CheckButton;
 
 import gtkutils;
@@ -20,7 +22,14 @@ enum ui = q{
 			}
 			Label nameLabel {
 				|label = ""
-
+				.Hexpand = true
+				.Halign = Align.START
+				.Xalign = 0
+			}
+			Button {
+				Image {
+					.FromIconName = "open-menu-symbolic", IconSize.BUTTON
+				}
 			}
 		}
 	}
