@@ -66,7 +66,8 @@ public:
 		if (checked.length == 0)
 			return false;
 
-		if (checked[$ - 1] - Clock.currTime() < hours(24))
+		auto now = Clock.currTime();
+		if (checked[$ - 1].day == now.day)
 			return true;
 
 		return false;
