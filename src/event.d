@@ -19,11 +19,20 @@ public:
 	// Returns the amount of days considered in getPercentage()
 	int getDays() {
 		import std.algorithm;
-		return min(14, checked.length);
+		if (checked.length == 0) {
+			// Still consider today
+			return 1;
+		}
+		auto now = Clock.currTime();
+		// Consider at most 14 days, but not if the event
+		// is not even 14 days old...
+		// So: 14 days from the day it has first been checked
+		return min (14, now.day - checked[0].day + 1);
 	}
 
 	int getCheckedDays() {
 		import std.stdio;
+		import std.algorithm: min;
 		auto now = Clock.currTime();
 		int nChecked = 0;
 		auto nTimes = this.getDays();
@@ -31,7 +40,10 @@ public:
 		if (nTimes == 0)
 			return 0;
 
-		for (ulong i = 0; i < nTimes; i ++) {
+		// TODO: getDays() uses the difference of two weekdays,
+		//       so it will break when weeks or months wrap...
+
+		for (ulong i = 0; i < min(checked.length, nTimes); i ++) {
 			// Only check times in the last 14 days
 			if ((now - checked[$ - 1 - i]) > days(14))
 				break;
