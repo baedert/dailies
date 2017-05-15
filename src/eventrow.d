@@ -46,6 +46,9 @@ enum ui = q{
 				Button deleteButton {
 					.Label = "Delete"
 				}
+				Button renameButton {
+					.Label = "Rename"
+				}
 				Button statsButton {
 					.Label = "Statistics"
 					.Hexpand = true
