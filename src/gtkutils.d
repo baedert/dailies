@@ -156,8 +156,8 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 				result ~= objectType ~ " " ~ childInfo.id ~ " = new " ~ objectType ~ "(";
 
 			// This will leave a trailing comma but whatever
-			foreach (prop_name; constructProps.keys) {
-				result ~= constructProps[prop_name] ~ ", ";
+			foreach (propName; constructProps.keys) {
+				result ~= constructProps[propName] ~ ", ";
 			}
 			result ~= ");\n";
 		} else {
@@ -168,8 +168,8 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			result ~= ");\n";
 		}
 
-		foreach (prop_name; nonConstructProps.keys) {
-			result ~= childInfo.id ~ ".set" ~ prop_name ~ "(" ~ nonConstructProps[prop_name] ~ ");\n";
+		foreach (propName; nonConstructProps.keys) {
+			result ~= childInfo.id ~ ".set" ~ propName ~ "(" ~ nonConstructProps[propName] ~ ");\n";
 		}
 		foreach (c; styleClasses) {
 			result ~= childInfo.id ~ ".getStyleContext().addClass(\"" ~ c.strip() ~ "\");\n";
@@ -196,12 +196,12 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 	// We simply do both things in both cases...
 	if (just_members) {
-		string member_result;
+		string memberResult;
 		foreach (m; objectIds.keys) {
 			if (m != "this")
-				member_result ~= objectIds[m] ~ " " ~ m ~ ";\n";
+				memberResult ~= objectIds[m] ~ " " ~ m ~ ";\n";
 		}
-		return member_result;
+		return memberResult;
 	}
 
 	return result;
