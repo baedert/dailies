@@ -42,9 +42,11 @@ enum ui = q{
 
 			Box menuBox {
 				|orientation = Orientation.HORIZONTAL
-				|spacing = 24
+				|spacing = 12
 				Button deleteButton {
-					.Label = "Delete"
+					Image {
+						.FromIconName = "user-trash-symbolic", IconSize.BUTTON
+					}
 				}
 				Button renameButton {
 					.Label = "Rename"
