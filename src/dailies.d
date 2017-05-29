@@ -7,7 +7,7 @@ import gdk.Screen;
 
 import mainwindow;
 
-enum appCss = q{
+enum appCss = "
 	popover {
 		padding: 12px;
 	}
@@ -22,21 +22,21 @@ enum appCss = q{
 	}
 
 	.over-90 {
-		/* Light green */
-		background-color: rgb(124,255,105);
+		background-color: #95ff99;
 	}
 	.over-75 {
+		background-color: #c184ff;
 	}
 	.over-50 {
-		background-color: rgb(70,128,226);
+		background-color: #84a2ff;
 	}
 	.over-25 {
-		background-color: orange;
+		background-color: #ffc484;
 	}
 	.over-00 {
-		background-color: red;
+		background-color: #ff8c84;
 	}
-};
+";
 
 
 class Dailies : GtkApplication.Application {

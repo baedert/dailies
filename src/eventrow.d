@@ -6,6 +6,9 @@ import gtk.Button;
 import gtk.Image;
 import gtk.Stack;
 import gtk.CheckButton;
+import gtk.Widget;
+
+import cairo.Context;
 
 import gtkutils;
 import event;
@@ -94,9 +97,11 @@ public:
 			ListBox parent = cast(ListBox)this.getParent();
 			parent.remove(this);
 		});
+
+		addOnDraw(&onDrawCb);
 	}
 
-	public void updateStyleClasses() {
+	void updateStyleClasses() {
 		float p = event.getPercentage();
 		string[] classes = ["over-90", "over-75", "over-50", "over-25", "over-00"];
 		foreach(c; classes)
@@ -120,4 +125,8 @@ public:
 private:
 	mixin(uiMembers(ui));
 	Event event;
+
+	bool onDrawCb(Scoped!Context ct, Widget w) {
+		return false;
+	}
 }
