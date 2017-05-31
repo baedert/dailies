@@ -1,3 +1,5 @@
+import std.datetime;
+
 import gtk.ApplicationWindow;
 import gtk.Application;
 import gtk.Box;
@@ -5,10 +7,14 @@ import gtk.HeaderBar;
 import gtk.Button;
 import gtk.Image;
 import gtk.ListBox;
+import gtk.ListBoxRow;
 import gtk.ScrolledWindow;
 import gtk.Popover;
 import gtk.Label;
 import gtk.Entry;
+import gtk.Widget;
+
+import GdkEvent = gdk.Event;
 
 import gtkutils;
 import event;
@@ -53,8 +59,8 @@ public:
 	this(Application app) {
 		mixin(uiInit(ui));
 
-		addButton.addOnClicked(&addButtonClicked);
 
+		this.today = Clock.currTime();
 		// Load events, insert them into the list
 		eventDb = new EventDatabase();
 		eventDb.load();
@@ -62,12 +68,14 @@ public:
 			eventListBox.add(new EventRow(e, eventDb));
 		}
 
-		this.resize(600, 400);
+		addButton.addOnClicked(&addButtonClicked);
+		this.addOnFocusIn(&updateDay);
 	}
 
 private:
 	mixin(uiMembers(ui));
 	EventDatabase eventDb;
+	SysTime today;
 
 	void addButtonClicked(Button button) {
 		// Construct a popover and show it.
@@ -96,5 +104,29 @@ private:
 		box.showAll();
 		popover.add(box);
 		popover.popup();
+	}
+
+	  bool updateDay(GdkEvent.Event evt, Widget widget) {
+		import std.stdio;
+		writeln("Updating day...");
+
+		auto now = Clock.currTime;
+		if (now.day != today.day) {
+			int i = 0;
+			ListBoxRow row = eventListBox.getRowAtIndex(0);
+
+			while (row !is null) {
+				EventRow erow = cast(EventRow)row;
+
+				erow.updateStyleClasses();
+
+			  i ++;
+			  row = eventListBox.getRowAtIndex(i);
+			}
+
+			this.today = now;
+		}
+
+		return true;
 	}
 }
