@@ -1,0 +1,4 @@
+[wrap-git]
+directory = gtkd-utils
+url=https://github.com/baedert/gtkd-utils
+revision=head
