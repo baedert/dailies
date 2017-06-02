@@ -1,6 +1,8 @@
-
-
 # Dailies
+
+![Screenshot1](data/screenshots1.png)
+![Screenshot2](data/screenshots2.png)
+
 
 Write down things you want to do daily. Check them when you've done them.
 
