@@ -16,15 +16,19 @@ public:
 		import std.range;
 		import std.stdio;
 
-		if (!exists(CONFIG_DIR)) {
-			mkdir(CONFIG_DIR);
+		string configDir = getConfigDir();
+		string configFile = getConfigFile();
+
+		// TODO: Doing this is racy but I couldn't care less.
+		if (!exists(configDir)) {
+			mkdir(configDir);
 		}
 
-		if (!exists(CONFIG_FILE)) {
+		if (!exists(configFile)) {
 			return;
 		}
 
-		string contents = readText(CONFIG_FILE);
+		string contents = readText(configFile);
 
 		assert(this.events == []);
 
@@ -47,6 +51,7 @@ public:
 		import std.file;
 		import std.stdio;
 		import std.conv: to;
+		string configFile = getConfigFile();
 		string output;
 
 		foreach (Event e; events) {
@@ -57,7 +62,7 @@ public:
 			                        .array.to!string) ~ "\n";
 		}
 
-		auto f = File(CONFIG_FILE, "w");
+		auto f = File(configFile, "w");
 		f.write(output);
 		f.close();
 	}
@@ -85,8 +90,18 @@ public:
 	}
 
 private:
-	static enum CONFIG_DIR  = "/home/baedert/.config/dailies/";
-	static enum CONFIG_FILE = CONFIG_DIR ~ "dailies.txt";
-
 	private Event[] events;
+}
+
+string getConfigDir() {
+	version(windows) {
+		static assert(0);
+	} else {
+		import std.path: expandTilde;
+		return expandTilde("~/.config/dailies");
+	}
+}
+
+string getConfigFile() {
+	return getConfigDir() ~ "/dailies.txt";
 }
