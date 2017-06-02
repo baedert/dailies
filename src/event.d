@@ -16,7 +16,8 @@ public:
 		return checked;
 	}
 
-	// Returns the amount of days considered in getPercentage()
+	// Returns the amount of days considered in getPercentage()s
+
 	int getDays() {
 		import std.algorithm;
 		if (checked.length == 0) {
@@ -27,7 +28,10 @@ public:
 		// Consider at most 14 days, but not if the event
 		// is not even 14 days old...
 		// So: 14 days from the day it has first been checked
-		return min (14, now.day - checked[0].day + 1);
+		auto result = min (14, (now - checked[0]).total!"days");
+
+		assert(result >= 0);
+		return cast(int)result;
 	}
 
 	int getCheckedDays() {
