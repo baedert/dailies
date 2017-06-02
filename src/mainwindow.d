@@ -108,9 +108,9 @@ private:
 
 	  bool updateDay(GdkEvent.Event evt, Widget widget) {
 		import std.stdio;
-		writeln("Updating day...");
-
 		auto now = Clock.currTime;
+		writeln("Updating day. Now: ", now);
+
 		if (now.day != today.day) {
 			int i = 0;
 			ListBoxRow row = eventListBox.getRowAtIndex(0);
