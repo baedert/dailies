@@ -120,8 +120,8 @@ private:
 
 				erow.updateStyleClasses();
 
-			  i ++;
-			  row = eventListBox.getRowAtIndex(i);
+				i ++;
+				row = eventListBox.getRowAtIndex(i);
 			}
 
 			this.today = now;
