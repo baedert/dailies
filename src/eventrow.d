@@ -101,6 +101,18 @@ public:
 		addOnDraw(&onDrawCb);
 	}
 
+	void updateDay() {
+		doneButton.setActive(event.todayChecked());
+		updateStyleClasses();
+	}
+private:
+	mixin(uiMembers(ui));
+	Event event;
+
+	bool onDrawCb(Scoped!Context ct, Widget w) {
+		return false;
+	}
+
 	void updateStyleClasses() {
 		float p = event.getPercentage();
 		string[] classes = ["over-90", "over-75", "over-50", "over-25", "over-00"];
@@ -121,12 +133,5 @@ public:
 
 		import std.conv: to;
 		this.ratioLabel.setLabel(to!string(event.getCheckedDays()) ~ " / " ~ to!string(event.getDays()));
-	}
-private:
-	mixin(uiMembers(ui));
-	Event event;
-
-	bool onDrawCb(Scoped!Context ct, Widget w) {
-		return false;
 	}
 }

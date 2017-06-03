@@ -118,7 +118,7 @@ private:
 			while (row !is null) {
 				EventRow erow = cast(EventRow)row;
 
-				erow.updateStyleClasses();
+				erow.updateDay();
 
 				i ++;
 				row = eventListBox.getRowAtIndex(i);
