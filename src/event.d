@@ -44,9 +44,6 @@ public:
 		if (nTimes == 0)
 			return 0;
 
-		// TODO: getDays() uses the difference of two weekdays,
-		//       so it will break when weeks or months wrap...
-
 		for (ulong i = 0; i < min(checked.length, nTimes); i ++) {
 			// Only check times in the last 14 days
 			if ((now - checked[$ - 1 - i]) > days(14))
