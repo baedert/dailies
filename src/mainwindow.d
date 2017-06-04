@@ -59,7 +59,6 @@ public:
 	this(Application app) {
 		mixin(uiInit(ui));
 
-
 		this.today = Clock.currTime();
 		// Load events, insert them into the list
 		eventDb = new EventDatabase();

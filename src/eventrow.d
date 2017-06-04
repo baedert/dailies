@@ -78,7 +78,7 @@ public:
 		nameLabel.setLabel(event.getName());
 		doneButton.setActive(event.todayChecked());
 		doneButton.addOnToggled((cb) {
-			event.check();
+			event.check(cb.getActive());
 			db.save();
 			updateStyleClasses();
 		});

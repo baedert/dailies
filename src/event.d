@@ -1,7 +1,5 @@
 import std.datetime;
 
-
-
 class Event {
 public:
 	this(string name) {
@@ -61,14 +59,23 @@ public:
 		return cast(float)getCheckedDays() / cast(float)getDays();
 	}
 
-	void check() {
+	void check(bool status) {
 		auto now = Clock.currTime();
-		if (checked.length > 0 && checked[$ - 1].day == now.day) {
-			return;
+
+		if (status) {
+			if (checked.length > 0 && checked[$ - 1].day == now.day) {
+				return;
+			}
+			// Add the current day to the list of
+			// days this even has been checked
+			this.checked ~= now;
+		} else {
+			import std.algorithm;
+			// Uncheck
+			if (checked.length > 0 && checked[$ - 1].day == now.day) {
+				this.checked = std.algorithm.remove(this.checked, this.checked.length - 1);
+			}
 		}
-		// Add the current day to the list of
-		// days this even has been checked
-		this.checked ~= now;
 	}
 
 	void setCheckedTimes(SysTime[] times) {
@@ -79,6 +86,8 @@ public:
 		if (checked.length == 0)
 			return false;
 
+		// Just comparing the days here is fine, even if they turn around on months
+		// because we only track events over 14 days and that's not enough for it to matter.
 		auto now = Clock.currTime();
 		if (checked[$ - 1].day == now.day)
 			return true;
