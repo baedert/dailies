@@ -126,6 +126,6 @@ private:
 			this.today = now;
 		}
 
-		return true;
+		return false;
 	}
 }
