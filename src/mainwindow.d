@@ -40,7 +40,7 @@ enum ui = q{
 			ScrolledWindow {
 				.Hexpand = true
 				.Vexpand = true
-				.Policy = PolicyType.NEVER, PolicyType.AUTOMATIC
+				.Policy = PolicyType.NEVER, PolicyType.NEVER
 				.PropagateNaturalHeight = true
 				ListBox eventListBox {
 					.SelectionMode = SelectionMode.NONE
