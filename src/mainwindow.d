@@ -5,6 +5,7 @@ import gtk.Application;
 import gtk.Box;
 import gtk.HeaderBar;
 import gtk.Button;
+import gtk.ToggleButton;
 import gtk.Image;
 import gtk.ListBox;
 import gtk.ListBoxRow;
@@ -12,6 +13,7 @@ import gtk.ScrolledWindow;
 import gtk.Popover;
 import gtk.Label;
 import gtk.Entry;
+import gtk.Stack;
 import gtk.Widget;
 
 import GdkEvent = gdk.Event;
@@ -28,9 +30,33 @@ enum ui = q{
 		HeaderBar header_bar $Titlebar {
 			.ShowCloseButton = true
 			.Title = "Dailies"
-			Button addButton {
+			ToggleButton addButton {
 				Image {
 					.FromIconName = "list-add-symbolic", IconSize.BUTTON
+				}
+			}
+
+			Stack titleStack $CustomTitle {
+				.TransitionType = StackTransitionType.SLIDE_LEFT_RIGHT
+
+				Box addEventBox {
+					|orientation = Orientation.HORIZONTAL
+					|spacing = 12
+					.Hexpand = true
+					.Halign = Align.CENTER
+
+					Entry eventNameEntry {
+					}
+					Button addEventButton {
+						.Label = "Save"
+						#style = suggested-action
+					}
+				}
+
+				Label titleLabel {
+					|label = "Dailies"
+					.Visible = true
+					#style = title
 				}
 			}
 		}
@@ -67,8 +93,11 @@ public:
 			eventListBox.add(new EventRow(e, eventDb));
 		}
 
-		addButton.addOnClicked(&addButtonClicked);
+		addButton.addOnToggled(&addButtonToggled);
+		addEventButton.addOnClicked(&addEventButtonClicked);
+
 		this.addOnFocusIn(&updateDay);
+		titleStack.setVisibleChild(titleLabel);
 	}
 
 private:
@@ -76,33 +105,23 @@ private:
 	EventDatabase eventDb;
 	SysTime today;
 
-	void addButtonClicked(Button button) {
-		// Construct a popover and show it.
-		auto popover = new Popover(button);
-		auto box = new Box(Orientation.HORIZONTAL, 12);
-		box.add(new Label("Name:"));
-		auto entry = new Entry();
-		entry.setActivatesDefault(true);
-		box.add(entry);
-		auto submitButton = new Button("Save");
-		submitButton.setReceivesDefault(true);
-		submitButton.setCanDefault(true);
-		popover.setDefaultWidget(submitButton);
-		box.add(submitButton);
+	void addButtonToggled(ToggleButton button) {
+		if (button.getActive()) {
+			titleStack.setVisibleChild(addEventBox);
+			eventNameEntry.grabFocus();
+		} else {
+			titleStack.setVisibleChild(titleLabel);
+		}
+	}
 
-		submitButton.addOnClicked((button) {
-			auto e = eventDb.addNewEvent(entry.getText());
-			auto row =  new EventRow(e, eventDb);
-			row.showAll();
-			eventListBox.add(row);
-			eventDb.save();
-			popover.popdown();
-		});
-
-
-		box.showAll();
-		popover.add(box);
-		popover.popup();
+	void addEventButtonClicked(Button button) {
+		string eventName = eventNameEntry.getText();
+		auto e = eventDb.addNewEvent(eventName);
+		auto row =  new EventRow(e, eventDb);
+		row.showAll();
+		eventListBox.add(row);
+		eventDb.save();
+		titleStack.setVisibleChild(titleLabel);
 	}
 
 	  bool updateDay(GdkEvent.Event evt, Widget widget) {

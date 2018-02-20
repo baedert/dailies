@@ -23,7 +23,7 @@ dailies = executable(
     'dailies',
     sources,
     dependencies: [
-        gtkd_dep, 
+        gtkd_dep,
         gtkd_utils_dep
     ],
     d_args: [
